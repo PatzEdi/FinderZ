@@ -30,5 +30,5 @@ ____________________________________________________________________________
 - [OS module](https://docs.python.org/3/library/os.html)
 - [Subprocess module](https://docs.python.org/3/library/subprocess.html)
 ____________________________________________________________________________
-## **Make sure to leave a star!.**
+## **Make sure to leave a star!**
 - If you like this project, leaving a star is what motivates me in doing more. Thank you, and I hope this is useful to all.
