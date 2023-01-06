@@ -3,7 +3,7 @@ A library that extends file management functionality in Python with many useful 
 
 This script uses the os and subprocess libraries in order to function properly. 
 
-# **Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** #
+**Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
 ## **Features**
 - Consists of three classes: GatherInfo, fileOperands, and callBash.
