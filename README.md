@@ -8,7 +8,7 @@ ____________________________________________________________________________
 ## **Features**
 - Consists of three classes: GatherInfo, fileOperands, and callBash.
 - Find any file with a certain keyword. This means you no longer have to necessarily know the full name of the file in case you forgot it. 
-- Gather information such as files in a directory, name of those files, and even a createFiles tool ask well as a curated removeFiles tool.
+- Gather information such as files in a directory, name of those files, and even a createFiles tool as well as a curated removeFiles tool.
 - Is easy to add new things to the library.
 - In case of functionality restrictions, callBash is a function that calls a bash script in order to expand functionality at its peak.
 - Easy to use.
