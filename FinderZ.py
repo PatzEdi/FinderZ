@@ -39,6 +39,25 @@ class GatherInfo:
 		
 #MainFile operations:	
 class fileOperands:
+	#Find a single file with a SPECIFIC name (no keyword)
+	def findFile(fileName, path):
+		result = []
+		for root, dirs, files in os.walk(path):
+			files = ''.join(files)
+			if fileName in files:
+				
+				mainFileDir = os.path.join(root)
+				allFiles = GatherInfo.getAllFileNamesinDir(mainFileDir)
+				amountFilesInDir = GatherInfo.getResultsAmount(allFiles)
+				iterator = 0
+				for i in range(amountFilesInDir):
+					finder = allFiles[iterator]
+					stringed = str(''.join(finder))
+					if fileName == stringed:
+						result.append(os.path.join(root, stringed))
+					iterator += 1
+		return result
+	
 	def findFiles(fileName, path):
 		result = []
 		for root, dirs, files in os.walk(path):
