@@ -1,10 +1,45 @@
 # FinderZ
-A library that extends file management functionality in Python with many useful features in order to save your time and make life easier! 
+A library that extends file management functionality in Python with many useful features in order to save your time and make life easier!
+
+![finderz-logo](https://user-images.githubusercontent.com/116693779/213965405-6b416655-09d6-4ef1-ae05-58c32035541d.png)
+
+<p align="center">
+	<img src="https://img.shields.io/badge/License-GPL--3.0-brightgreen"
+		height="23">
+	<img src="https://img.shields.io/badge/Creator-PatzEdi-brightgreen"
+		height="23">
+	<img src="https://img.shields.io/badge/Latest%20Version-V%201.0-brightgreen"
+		height="23">
+</p>
+
+FinderZ is now on PyPi! [Check it out here!](https://pypi.org/project/FinderZ/)
 
 This script uses the os and subprocess libraries in order to function properly. 
 
 ## **Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
+## **Installation**
+
+Install with PIP:
+```
+pip3 install FinderZ==1.0.1
+```
+## **Usage**
+Importing:
+```
+from FinderZ import FinderZLib
+```
+Example for finding files with a specific keyword:
+```
+FinderZLib.fileOperands.findFile("fileName", "Custom Directory")
+```
+Or, if you want to import a single class:
+```
+from FinderZ.FinderZLib import fileOperands as fO
+
+#Find the file, calling the command "fO":
+print(fO.findFiles("fileName", "Custom Path"))
+```
 ## **Features**
 - Consists of three classes: GatherInfo, fileOperands, and callBash.
 - Find any file with a certain keyword. This means you no longer have to necessarily know the full name of the file in case you forgot it. 
