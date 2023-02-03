@@ -26,7 +26,7 @@ ____________________________________________________________________________
 
 Install with PIP:
 ```
-pip3 install FinderZ==1.0.1
+pip3 install FinderZ
 ```
 ## **Usage**
 Importing:
