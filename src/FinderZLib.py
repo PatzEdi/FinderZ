@@ -36,7 +36,16 @@ class GatherInfo:
 			placeHolder = str(list[iterator])
 			print(placeHolder + "\n")
 			iterator += 1
-		
+	def getFileLineContents(filePath):
+		f = open(filePath, 'r')
+		lines = f.readlines()
+		return lines
+	def getFileLineAmount(filePath):
+		f = open(filePath, 'r')
+		lines = f.readlines()
+		amount = len(lines)
+		return amount
+
 #MainFile operations:	
 class fileOperands:
 	#Find a single file with a SPECIFIC name (no keyword)
@@ -74,7 +83,22 @@ class fileOperands:
 						result.append(os.path.join(root, stringed))
 					iterator += 1
 		return result
-		
+	#Scan files recursively for content:
+	def scanFilesForContent(filePath, contentKeyWord, fileExtension):
+		Check = False
+		for folder, dirs, files in os.walk(filePath):
+			if Check == True:
+				break
+			for file in files:
+				if file.endswith(fileExtension):
+					fullpath = os.path.join(folder, file)
+					with open(fullpath, 'r') as f:
+						for line in f:
+							if contentKeyWord in line:
+								Check = True
+								return fullpath
+								break
+
 	#Function to remove file with a certain keyword.
 	def removeFiles(fileName, path):
 		result = []
