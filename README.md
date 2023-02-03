@@ -18,6 +18,10 @@ This script uses the os and subprocess libraries in order to function properly.
 
 ## **Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
+## **CHANGELOG:**
+- Added new functions in the GatherInfo class for reading a file and going in depth with its contents.
+- Added one new function in the fileOperands class that searches for files with a specific keyword in their content. This function returns the directory of that file.
+
 ## **Installation**
 
 Install with PIP:
