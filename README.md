@@ -18,9 +18,12 @@ This script uses the os and subprocess libraries in order to function properly.
 
 ## **Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG:**
-- Added new functions in the GatherInfo class for reading a file and going in depth with its contents.
-- Added one new function in the fileOperands class that searches for files with a specific keyword in their content. This function returns the directory of that file.
+## **CHANGELOG: 1.0.3**
+- Added new function in fileOperands: findAndReplace. This new function allows for the quick and recursive replacement of a certain keyword in file content with a new keyword. 
+- If not used carefully, this function could lead to damage!
+- New function features the ability to bypass undecodable files for you. This way, you do not need to worry about file-reading errors.
+- Fixed importing issues and made importing simpler. 
+- Instead of "import FinderZ.FinderZLib", you just need to do "import FinderZ". More info below.
 
 ## **Installation**
 
@@ -31,18 +34,18 @@ pip3 install FinderZ
 ## **Usage**
 Importing:
 ```
-from FinderZ import FinderZLib
+import FinderZ
 ```
 Example for finding files with a specific keyword:
 ```
-FinderZLib.fileOperands.findFile("fileName", "Custom Directory")
+FinderZ.fileOperands.findFiles("fileName", "Custom Directory")
 ```
 Or, if you want to import a single class:
 ```
-from FinderZ.FinderZLib import fileOperands as fO
+from FinderZ import fileOperands
 
 #Find the file, calling the command "fO":
-print(fO.findFiles("fileName", "Custom Path"))
+print(fileOperands.findFiles("fileName", "Custom Path"))
 ```
 ## **Features**
 - Consists of three classes: GatherInfo, fileOperands, and callBash.
