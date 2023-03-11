@@ -8,29 +8,21 @@ A library that extends file management functionality in Python with many useful 
 		height="23">
 	<img src="https://img.shields.io/badge/Creator-PatzEdi-brightgreen"
 		height="23">
-	<img src="https://img.shields.io/badge/Latest%20Version-V%201.0-brightgreen"
+	<img src="https://img.shields.io/badge/Version-Latest-brightgreen"
 		height="23">
 </p>
-
-FinderZ is now on PyPi! [Check it out here!](https://pypi.org/project/FinderZ/)
-
 This script uses the os and subprocess libraries in order to function properly. 
 
-## **Written in python, this script provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
+## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.0.3**
-- Added new function in fileOperands: findAndReplace. This new function allows for the quick and recursive replacement of a certain keyword in file content with a new keyword. 
-- If not used carefully, this function could lead to damage!
-- New function features the ability to bypass undecodable files for you. This way, you do not need to worry about file-reading errors.
-- Fixed importing issues and made importing simpler. 
-- Instead of "import FinderZ.FinderZLib", you just need to do "import FinderZ". More info below.
+## **CHANGELOG: 1.1.0**
+- Release version 1.1.0
+- Added new functions concerning moving and copying files as well as directories.
+- These functions include four new functions: moveFile, copyFile, moveDir, and copyDir. 
+- moveFile moves a file from one place to another, copyFile copies a file, and moveDir moves a directory, and copyDir copies a directory and all of its contents. 
+- Added new dependency: shutil. Huge credits to shutil developers!
+- Fixes in README.md
 
-## **Installation**
-
-Install with PIP:
-```
-pip3 install FinderZ
-```
 ## **Usage**
 Importing:
 ```
@@ -67,10 +59,13 @@ ____________________________________________________________________________
 ____________________________________________________________________________
 ## **User notice**
 - Some of the functions are only there in case one has to get user input or wants to format things in a more visible way. These functions include askMainDir, and the expandListInfo functions.
+- This project is still a work in progress! It is very flexible in adding new functions. So far, there are still basic functions being added frequently, and some more advanced functions being added gradually. Thanks for being patient, and enjoy!
 ____________________________________________________________________________
 ## **Services used (Credits):**
 - [OS module](https://docs.python.org/3/library/os.html)
+- [Shutil module](https://docs.python.org/3/library/shutil.html)
 - [Subprocess module](https://docs.python.org/3/library/subprocess.html)
+
 ____________________________________________________________________________
 ## **Make sure to leave a star!**
 - If you like this project, leaving a star is what motivates me in doing more. Thank you, and I hope this is useful to all.
