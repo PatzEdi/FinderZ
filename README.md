@@ -21,8 +21,8 @@ This script uses the os and subprocess libraries in order to function properly.
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.2.1**
-- Release version 1.2.1
+## **CHANGELOG: 1.2.2**
+- Release version 1.2.2
 - Added new functions to rename files and directories.
 - Renaming files is now possible! 
 
