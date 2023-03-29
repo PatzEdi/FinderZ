@@ -218,6 +218,19 @@ class fileOperands:
 		newDirectory = newDir + "/" + lastdir
 		shutil.copytree(originalDir, newDirectory)
 		return True
+	
+	
+	#VERSION 1.2.0, rename files and directories.
+	def renameFile(newName, filePath):
+		#Remove any slash marks:
+		newFilePath = os.path.dirname(filePath)
+		os.rename(filePath, newFilePath + "/" + newName)
+
+	def renameDirectory(newName, directoryPath):
+		newDirectoryPath = os.path.dirname(os.path.dirname(directoryPath))
+		os.rename(directoryPath, newDirectoryPath + "/" + newName)
+	
+	
 #Class to call bash scripts (Gives even more flexibilty):
 class callBash:
 	def runFile(path):
