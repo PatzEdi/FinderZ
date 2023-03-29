@@ -10,18 +10,31 @@ A library that extends file management functionality in Python with many useful 
 		height="23">
 	<img src="https://img.shields.io/badge/Version-Latest-brightgreen"
 		height="23">
+	
+	
+</p>
+<p align = "center">
+	<img src="https://static.pepy.tech/badge/finderz"
+		height="23">
 </p>
 This script uses the os and subprocess libraries in order to function properly. 
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.1.0**
-- Release version 1.1.0
-- Added new functions concerning moving and copying files as well as directories.
-- These functions include four new functions: moveFile, copyFile, moveDir, and copyDir. 
-- moveFile moves a file from one place to another, copyFile copies a file, and moveDir moves a directory, and copyDir copies a directory and all of its contents. 
-- Added new dependency: shutil. Huge credits to shutil developers!
-- Fixes in README.md
+## **CHANGELOG: 1.2.0**
+- Release version 1.2.0
+- Added new functions to rename files and directories.
+- Renaming files is now possible! 
+
+In order to for example rename a file, do so like this:
+
+```
+renameFile("newName", "path/to/file") #Where newName is the new name of the file (including its extension!)
+```
+
+- Added Code of Conduct.
+- Added download marker - thank you for all of those downloads!
+- New documentation will be added soon that explains each function and functionality of each function in a detailed manner.
 
 ## **Usage**
 Importing:
