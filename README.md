@@ -21,22 +21,24 @@ This script uses the os and subprocess libraries in order to function properly.
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.2.2**
-- Release version 1.2.2
-- Added new functions to rename files and directories.
-- Renaming files is now possible! 
+## **CHANGELOG: 1.2.3**
+- Release version 1.2.3
+- Added new function: insertTextInFile
+- With this new function, you can insert text in any line of a file. 
 
-In order to for example rename a file, do so like this:
+In order to add text at a specific line in a file, do so like this:
 
 ```
-renameFile("newName", "path/to/file") #Where newName is the new name of the file (including its extension!)
+fileOperands.insertTextInFile("insertionText", lineNumber, "/path/to/file/", appendNewLines = False) #Where append new lines creates new lines if you want to put text in a line that is bigger than the current line amount of the file.
 ```
 
-- Added Code of Conduct.
-- Added download marker - thank you for all of those downloads!
 - New documentation will be added soon that explains each function and functionality of each function in a detailed manner.
 
 ## **Usage**
+Installation:
+```
+pip3 install FinderZ
+```
 Importing:
 ```
 import FinderZ
