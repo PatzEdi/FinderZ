@@ -309,7 +309,17 @@ class fileOperands:
 			f.writelines(fileLines)
 		#If the Check == False, then raise this exception:
 		else:
-			raise Exception("ERR: No specified line number found in file.")
+			raise Exception("ERR: No specified line number found in file.")\
+	
+	#VERSION: 1.2.4
+    #Create a single file:
+	def createFile(fileName, path):
+		os.chdir(path)
+		f = open(fileName, 'w')
+		f.close()
+	#Remove a single file:
+	def removeFile(filePath):
+		os.remove(filePath)
 
 
 

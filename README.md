@@ -17,22 +17,28 @@ A library that extends file management functionality in Python with many useful 
 	<img src="https://static.pepy.tech/badge/finderz"
 		height="23">
 </p>
-This script uses the os and subprocess libraries in order to function properly. 
+FinderZ uses the os, subprocess, and shutil libraries in order to function properly. 
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.2.3**
-- Release version 1.2.3
-- Added new function: insertTextInFile
-- With this new function, you can insert text in any line of a file. 
+## **CHANGELOG: 1.2.4**
+- Release version 1.2.4
+- Added new functions: createFile and removeFile
+- With these new functions, you can easily create and remove singular files.
+- Fixed some README issues.
 
-In order to add text at a specific line in a file, do so like this:
+If you want to create a single file, you can do so like this:
 
 ```
-fileOperands.insertTextInFile("insertionText", lineNumber, "/path/to/file/", appendNewLines = False) #Where append new lines creates new lines if you want to put text in a line that is bigger than the current line amount of the file.
-```
+from FinderZ import fileOperands
 
-- New documentation will be added soon that explains each function and functionality of each function in a detailed manner.
+fileOperands.createFile("FileName", "fileCreationPath")
+```
+Note that the "FileName" in this case may also include a file extension.
+
+- Documentation will be added soon that explains each function and functionality of each function in a detailed manner.
+
+Thank you all for 10K Downloads!
 
 ## **Usage**
 Installation:
