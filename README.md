@@ -19,6 +19,8 @@ A library that extends file management functionality in Python with many useful 
 </p>
 FinderZ uses the os, subprocess, and shutil libraries in order to function properly. 
 
+**IMPORTANT UPDATE: I am currently applying and adding many new features to the FinderZ library. The new version is simply called FinderZ V2! It includes so many new things and is basically a recreation of the library. Release of V2 will be here soon. Thanks!**
+
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
 ## **CHANGELOG: 1.2.4**
