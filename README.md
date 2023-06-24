@@ -21,14 +21,14 @@ Full File Management Library for Python. And growing (V2 is out!)
 
 ## **IMPORTANT: ** 
 **V2 is finally out! To check out the details, go to the readthedocs documentation under the update v2 section!**
-**LINK TO READ THE DOCS: [Documentation](DOCURL)** 
-**IF YOU WANT TO USE THE SYNCHRONIZATION AND BACKUP CLASSeS, MAKE SURE TO THOROUGHLY READ THE [DOCUMENTATION](DOCURL) IN ORDER TO PREVENT DATA LOSS**
+**LINK TO READ THE DOCS: [Documentation](https://finderz.readthedocs.io/en/latest/index.html)** 
+**IF YOU WANT TO USE THE SYNCHRONIZATION AND BACKUP CLASSeS, MAKE SURE TO THOROUGHLY READ THE [DOCUMENTATION](https://finderz.readthedocs.io/en/latest/index.html) IN ORDER TO PREVENT DATA LOSS**
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
 ## **CHANGELOG: V2.0.0**
 
-To check out the details of V2, go to the [documentation](DOCURL). This is a big update with many new things!
+To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
 
 ## **Usage**

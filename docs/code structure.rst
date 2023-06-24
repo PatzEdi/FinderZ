@@ -23,7 +23,7 @@ In the code, there are six classes:::
 	The 'Logging' class is not important to the user and is therefore not imported within the package. It is solely used by the Synchronize and Backup classes.
 
 
-The GatherInfo class
+The **GatherInfo** class
 ====================
 
 The **GatherInfo** class consists of many different functions to gather general info on files and directories.
@@ -164,7 +164,7 @@ The ``synchronize`` function is the main parent function for file synchronizatio
 
 The synchronize function is constructed in a way that first takes in two directories to synchronize, gets the time of the directories last modified, and whoever was modified last, follows that directory in terms of actions. It then calls a sub function called synchronizeComponents, which then calls the main() function within the synchronizeComponents function. The main() function includes all of the synchronization algorithms, which then call other functions.
 
-The **Backup* class
+The **Backup** class
 ===================
 
 The **Backup** class consists of a ``main()`` function, which is then called from a ``mainIteration`` function. The ``mainIteration`` function consists of the main recursive loop that then inputs the current path into the ``main()`` function, and the ``main()`` function then executes an algorithm to backup everything that is either missing or is extra. 
@@ -174,7 +174,7 @@ The ``backup`` Function:
 
 This is the main function that will call the ``mainIteration`` function, and is what the user will be using. More info under the :doc:`function use` section of this guide.
 
-The **callBash* class
+The **callBash** class
 =====================
 
 The ``runFile`` Function:
