@@ -2,7 +2,7 @@
 
 Full File Management Library for Python. And growing (V2 is out!)
 
-![logo-color](https://github.com/PatzEdi/GeneralGithubRepoTesting/assets/116693779/d90bbd80-3c81-4153-8e1f-e8aa71bf7844)
+![logo-color](https://github.com/PatzEdi/FinderZ/raw/main/logo/logo-color.jpg)
 
 <p align="center">
 	<img src="https://img.shields.io/badge/License-GPL--3.0-brightgreen"
