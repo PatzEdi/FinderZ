@@ -1,7 +1,8 @@
 # FinderZ
-A library that extends file management functionality in Python with many useful features in order to save your time and make life easier!
 
-![finderz-logo](https://user-images.githubusercontent.com/116693779/213965405-6b416655-09d6-4ef1-ae05-58c32035541d.png)
+Full File Management Library for Python. And growing (V2 is out!)
+
+![logo-color](https://github.com/PatzEdi/GeneralGithubRepoTesting/assets/116693779/d90bbd80-3c81-4153-8e1f-e8aa71bf7844)
 
 <p align="center">
 	<img src="https://img.shields.io/badge/License-GPL--3.0-brightgreen"
@@ -17,30 +18,18 @@ A library that extends file management functionality in Python with many useful 
 	<img src="https://static.pepy.tech/badge/finderz"
 		height="23">
 </p>
-FinderZ uses the os, subprocess, and shutil libraries in order to function properly. 
 
-**IMPORTANT UPDATE: I am currently applying and adding many new features to the FinderZ library. The new version is simply called FinderZ V2! It includes so many new things and is basically a recreation of the library. Release of V2 will be here soon. Thanks!**
+## **IMPORTANT: ** 
+**V2 is finally out! To check out the details, go to the readthedocs documentation under the update v2 section!**
+**LINK TO READ THE DOCS: [Documentation](DOCURL)** 
+**IF YOU WANT TO USE THE SYNCHRONIZATION AND BACKUP CLASSeS, MAKE SURE TO THOROUGHLY READ THE [DOCUMENTATION](DOCURL) IN ORDER TO PREVENT DATA LOSS**
 
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
-## **CHANGELOG: 1.2.4**
-- Release version 1.2.4
-- Added new functions: createFile and removeFile
-- With these new functions, you can easily create and remove singular files.
-- Fixed some README issues.
+## **CHANGELOG: V2.0.0**
 
-If you want to create a single file, you can do so like this:
+To check out the details of V2, go to the [documentation](DOCURL). This is a big update with many new things!
 
-```
-from FinderZ import fileOperands
-
-fileOperands.createFile("FileName", "fileCreationPath")
-```
-Note that the "FileName" in this case may also include a file extension.
-
-- Documentation will be added soon that explains each function and functionality of each function in a detailed manner.
-
-Thank you all for 10K Downloads!
 
 ## **Usage**
 Installation:
@@ -51,42 +40,38 @@ Importing:
 ```
 import FinderZ
 ```
-Example for finding files with a specific keyword:
-```
-FinderZ.fileOperands.findFiles("fileName", "Custom Directory")
-```
-Or, if you want to import a single class:
-```
-from FinderZ import fileOperands
 
-#Find the file, calling the command "fO":
-print(fileOperands.findFiles("fileName", "Custom Path"))
-```
 ## **Features**
-- Consists of three classes: GatherInfo, fileOperands, and callBash.
-- Find any file with a certain keyword. This means you no longer have to necessarily know the full name of the file in case you forgot it. 
-- Gather information such as files in a directory, name of those files, and even a createFiles tool as well as a curated removeFiles tool.
-- Is easy to add new things to the library.
+- Consists of three classes: GatherInfo, fileOperands, Synchronize, Backup, and callBash.
+- Advanced file operations, already built for you (including many options to choose from!) 
+- Supports regex operations for some functions, as well as specific filters and multiple other choices to choose from. Options such as exact search or something even just containing a keyword, or even having the option to choose to seaerch recursively, are all included.
+- Includes full-featured, reliable synchronization and backup classes.
+- Full set of info gathering tools under the GatherInfo class.
+- Full-featured documentation to guide you through each function in detail. 
 - In case of functionality restrictions, callBash is a function that calls a bash script in order to expand functionality at its peak.
 - Easy to use.
 - You no longer have to take your time in making those file management algorithms that take a while to complete.
 - Fast and efficient, includes a plethora of other features. 
 ____________________________________________________________________________
 ## **Why?**
-- I wanted to showcase how one can easily create a full library that manages files in order to save time in an efficient way. 
+- FinderZ is a way to easily expand on the file system of many operating system. It supports, MacOS, Windows, Linux, and Android.
 - Who wouldn't want a tool to manage their files easily in their python scripts? This will save time!
 ____________________________________________________________________________
 ## **How?**
-- Using iterating techniques for a few of the functions, I was able to complete actions recursively through different directories. 
-- The use of the os and subprocess modules (especially os) made everything easier, and what I did was basically structure a library to make life easier.
+- FinderZ is composed of many iterating techniques and parametric options. Based on these options, the core of each function deals with a user's choice of what to do or what not to do.
+- More info under the documentation!
 ____________________________________________________________________________
 ## **User notice**
-- Some of the functions are only there in case one has to get user input or wants to format things in a more visible way. These functions include askMainDir, and the expandListInfo functions.
-- This project is still a work in progress! It is very flexible in adding new functions. So far, there are still basic functions being added frequently, and some more advanced functions being added gradually. Thanks for being patient, and enjoy!
+- I am not responsible for any damage or data lost using the FinderZ library. 
+- If using the Synchronize class, make sure renaming files or directories is never the last thing you do before synchronization, unless it is the only thing you did do (no adding, removing, copying, etc. files before)
+- This project has just been released to version 2! It has grown so much, but it is still growing and improving.
 ____________________________________________________________________________
 ## **Services used (Credits):**
 - [OS module](https://docs.python.org/3/library/os.html)
 - [Shutil module](https://docs.python.org/3/library/shutil.html)
+- [Time module](https://docs.python.org/3/library/time.html)
+- [Hashlib module](https://docs.python.org/3/library/hashlib.html)
+- [re](https://docs.python.org/3/library/re.html)
 - [Subprocess module](https://docs.python.org/3/library/subprocess.html)
 
 ____________________________________________________________________________

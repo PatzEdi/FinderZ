@@ -1,0 +1,19 @@
+V2 Changelog:
+- Release version 2 of FinderZ
+- Added full library documentation that explains the code structure and use of each function in detail. 
+- Added Regex options to certain functions. This increases the ability to search for specific elements.
+- Added backup and synchronization of folders. This is probably the biggest addition in V2! Check the documentation to find out more.
+- Added hash computation of files through the hash library.
+- Added many new functions to the GatherInfo class.
+- IMPORTANT: Removed the 'findFile' function, as the new 'exactSearch' parametric variable is now a part of FinderZ.
+- Added 'exactSearch' function for certain functions that before only took in a keyword as an input. Now, you can do file operaions with exact names of files.
+- Added the parametric option to scan recursively or just scan single directories to many functions (Before, recursive was always there by default, now you can also manage single directories!).
+- Made the parametric 'fileExtension' variable optional under the scanFilesForContent function (Now, by default, all files are include no matter the extension type. But you can specify it if needed!).
+- Reconstructed the insertTextInFile function: Now it is much more efficient.
+- Improved reliability in certain functions to avoid directory problems.
+- Replaced parametric strings and made them more 'global' to avoid confusion.
+- Bug fixes and improvements, removed unnecessary lines of code.
+- Updated README.
+
+##MAKE SURE TO ADD "User Notice: I AM NOT RESPONSIBLE FOR ANY DAMAGE DONE BY THE FINDERZ LIBRARY"
+##PERHAPS USE READTHEDOCS TO DO THE DOCUMENTATION

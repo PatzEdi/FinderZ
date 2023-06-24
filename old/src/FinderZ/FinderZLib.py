@@ -219,19 +219,17 @@ class fileOperands:
 		shutil.copytree(originalDir, newDirectory)
 		return True
 	
-	
-	#VERSION 1.2.0, rename files and directories.
+	#VERSION 1.2.1
 	def renameFile(newName, filePath):
 		#Remove any slash marks:
 		newFilePath = os.path.dirname(filePath)
 		os.rename(filePath, newFilePath + "/" + newName)
-
+		
 	def renameDirectory(newName, directoryPath):
 		newDirectoryPath = os.path.dirname(os.path.dirname(directoryPath))
 		os.rename(directoryPath, newDirectoryPath + "/" + newName)
-	
-	
-		#Version 1.2.3:
+
+	#Version 1.2.3:
 	def insertTextInFile(insertionText, lineNumber, filePath, appendNewLines = False):
 			
 		if lineNumber < 1:
@@ -309,8 +307,7 @@ class fileOperands:
 			f.writelines(fileLines)
 		#If the Check == False, then raise this exception:
 		else:
-			raise Exception("ERR: No specified line number found in file.")\
-	
+			raise Exception("ERR: No specified line number found in file.")
 	#VERSION: 1.2.4
     #Create a single file:
 	def createFile(fileName, path):
@@ -320,9 +317,6 @@ class fileOperands:
 	#Remove a single file:
 	def removeFile(filePath):
 		os.remove(filePath)
-
-
-
 #Class to call bash scripts (Gives even more flexibilty):
 class callBash:
 	def runFile(path):
