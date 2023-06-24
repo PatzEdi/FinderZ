@@ -54,7 +54,7 @@ import FinderZ
 - Fast and efficient, includes a plethora of other features. 
 ____________________________________________________________________________
 ## **Why?**
-- FinderZ is a way to easily expand on the file system of many operating system. It supports, MacOS, Windows, Linux, and Android.
+- FinderZ is a way to easily expand on the file system of many operating systems. It supports, MacOS, Windows, Linux, and Android.
 - Who wouldn't want a tool to manage their files easily in their python scripts? This will save time!
 ____________________________________________________________________________
 ## **How?**
