@@ -471,6 +471,7 @@ This function only takes in one required parameter, which is the path to the fil
 ---------------
 
 **IMPORTANT NOTE**
+
 .. note::
 
     Before using these functions, do keep in mind: It is highly dangerous to rename a directory or file as the last thing to do if you did other actions before (such as add files/dirs). This could lead to data loss! You should synchronize every time you add, remove, etc. something. 
