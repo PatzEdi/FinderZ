@@ -24,7 +24,7 @@ In the code, there are six classes:::
 
 
 The **GatherInfo** class
-====================
+========================
 
 The **GatherInfo** class consists of many different functions to gather general info on files and directories.
 
