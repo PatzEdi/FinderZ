@@ -44,7 +44,7 @@ import FinderZ
 ## **Features**
 - Consists of three classes: GatherInfo, fileOperands, Synchronize, Backup, and callBash.
 - Advanced file operations, already built for you (including many options to choose from!) 
-- Supports regex operations for some functions, as well as specific filters and multiple other choices to choose from. Options such as exact search or something even just containing a keyword, or even having the option to choose to seaerch recursively, are all included.
+- Supports regex operations for some functions, as well as specific filters and multiple other choices to choose from. Options such as exact search or something even just containing a keyword, or even having the option to choose to search recursively, are all included.
 - Includes full-featured, reliable synchronization and backup classes.
 - Full set of info gathering tools under the GatherInfo class.
 - Full-featured documentation to guide you through each function in detail. 
