@@ -508,6 +508,7 @@ For example, if the importantFilesFlag is left to a default (which is an undersc
     _importantFile.txt
 
 **IMPORTANT NOTE**
+
 .. note::
 
     Concerning the sync backup folder, it is totally recommended that you use it. PLEASE NOTE: IF YOU RUN THE SYNCHRONIZATION FOR THE FIRST TIME, RUN THE FIRST TIME WITH THE SYNCBACKUPFOLDER SET TO TRUE. This is to prevent initial data loss! As stated before, I am not responsible for any data lost. Initially, to learn how this works, use the backup folder to prevent data loss! You an disable it by putting the parameter to False, if you really need to.
