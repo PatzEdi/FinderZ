@@ -573,7 +573,7 @@ You can leave this in the background running and it will backup every time the r
 
 .. note::
 
-    It is reccomended that you use logs in order to prevent data loss. Logs help you (and me) figure out what went wrong or what you can do to retreive the file back/ what happened during a specific process.
+    It is recommended that you use logs in order to prevent data loss. Logs help you (and me) figure out what went wrong or what you can do to retreive the file back/ what happened during a specific process.
 
 
 **callBash** Usage
