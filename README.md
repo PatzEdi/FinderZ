@@ -19,7 +19,7 @@ Full File Management Library for Python. And growing (V2 is out!)
 		height="23">
 </p>
 
-## **IMPORTANT: ** 
+## IMPORTANT: 
 **V2 is finally out! To check out the details, go to the readthedocs documentation under the update v2 section!**
 **LINK TO READ THE DOCS: [Documentation](https://finderz.readthedocs.io/en/latest/index.html)** 
 **IF YOU WANT TO USE THE SYNCHRONIZATION AND BACKUP CLASSeS, MAKE SURE TO THOROUGHLY READ THE [DOCUMENTATION](https://finderz.readthedocs.io/en/latest/index.html) IN ORDER TO PREVENT DATA LOSS**
@@ -42,7 +42,7 @@ import FinderZ
 ```
 
 ## **Features**
-- Consists of three classes: GatherInfo, fileOperands, Synchronize, Backup, and callBash.
+- Consists of five classes: GatherInfo, fileOperands, Synchronize, Backup, and callBash.
 - Advanced file operations, already built for you (including many options to choose from!) 
 - Supports regex operations for some functions, as well as specific filters and multiple other choices to choose from. Options such as exact search or something even just containing a keyword, or even having the option to choose to search recursively, are all included.
 - Includes full-featured, reliable synchronization and backup classes.
