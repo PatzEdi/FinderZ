@@ -22,6 +22,7 @@ Full File Management Library for Python. And growing (V2 is out!)
 ## IMPORTANT: 
 **V2 is finally out! To check out the details, go to the readthedocs documentation under the update v2 section!**
 **Documentation: [FinderZ](https://finderz.readthedocs.io/en/latest/index.html)** 
+
 **If you want to use the Synchronization and Backup classes, please read the documentation linked above in order to prevent data loss**
 
 **AND: Huge thank you to [@RichardDally](https://github.com/RichardDally) , [@mikudae](https://github.com/mikudae) , [@kyzsuukii](https://github.com/kyzsuukii) , and [@fablau](github.com/fablau) for starring FinderZ.**
