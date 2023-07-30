@@ -32,6 +32,10 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
+**Minor Fix Version 2.0.3:**
+- Fixed bug in Backup class that gave an existence error. Sorry about that!
+- I have noticed some accidental printing in some functions (such as findFiles, that prints a boolean at the start). This does not currently affect anything, but just prints out occasional, unnecessary output. This will be fixed very soon.
+- Thank you for 16K Downloads!
 
 ## **Usage**
 Installation:
@@ -47,7 +51,7 @@ import FinderZ
 - Consists of five classes: GatherInfo, fileOperands, Synchronize, Backup, and callBash.
 - Advanced file operations, already built for you (including many options to choose from!) 
 - Supports regex operations for some functions, as well as specific filters and multiple other choices to choose from. Options such as exact search or something even just containing a keyword, or even having the option to choose to search recursively, are all included.
-- Includes full-featured, reliable synchronization and backup classes.
+- Includes full-featured, reliable synchronization and backup classes (beta). Both include optional and detailed logging.
 - Full set of info gathering tools under the GatherInfo class.
 - Full-featured documentation to guide you through each function in detail. 
 - In case of functionality restrictions, callBash is a function that calls a bash script in order to expand functionality at its peak.
