@@ -1207,7 +1207,7 @@ class Backup:
 
 			#Here, the very start is blank because the childdir is blank (Perhaps, just leave it as is? It does not really matter)
 
-			backUpFullPath = os.path.join(backupdir, childdir)
+			backUpFullPath = os.path.join(backupdir, childdir.replace("/", ''))
 			#Log it:
 			newLogList = Logging.Log(loggingBool, logList, announcement = "Entering main loop under mainIteration function", dir1 = childdir, dir2 = backUpFullPath, dir1Action = "Merged child path string '", dir2Action = "' into sync path:")
 			logList.extend(newLogList)
