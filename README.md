@@ -32,6 +32,8 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
+**Note: New hot fix 2.0.4 will be released in the next 24 hours. It introduces a few major and minor bug fixes and improvements.**
+
 **Minor Fix Version 2.0.3:**
 - Fixed bug in Backup class that gave an existence error. Sorry about that!
 - I have noticed some accidental printing in some functions (such as findFiles, that prints a boolean at the start). This does not currently affect anything, but just prints out occasional, unnecessary output. This will be fixed very soon.
