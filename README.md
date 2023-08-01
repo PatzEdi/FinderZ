@@ -32,7 +32,14 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
-**Note: New hot fix 2.0.4 will be released in the next 24 hours. It introduces a few major and minor bug fixes and improvements.**
+
+**Minor Fix Version 2.0.4:**
+- Fixed bug where removing more than one file at a time gave an existence error. Sorry for that!
+- Fixed bug where removing a folder that contained folder with the same name as the sync backup folder would result in an infinite loop of backup folders being created.
+- Minimized logging by making file updating hash-dependent. Now, updating files is marked as a critical (C) action in the log.
+- Removed unnecessary printing in some functions.
+- Added a file comparison function in GatherInfo
+- Currently, after having tested FinderZ on Android, permission errors may occasionally occur. This is likely due to read/write permissions assigned to a specific file.
 
 **Minor Fix Version 2.0.3:**
 - Fixed bug in Backup class that gave an existence error. Sorry about that!

@@ -14,6 +14,3 @@ V2 Changelog:
 - Replaced parametric strings and made them more 'global' to avoid confusion.
 - Bug fixes and improvements, removed unnecessary lines of code.
 - Updated README.
-
-##MAKE SURE TO ADD "User Notice: I AM NOT RESPONSIBLE FOR ANY DAMAGE DONE BY THE FINDERZ LIBRARY"
-##PERHAPS USE READTHEDOCS TO DO THE DOCUMENTATION

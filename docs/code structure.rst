@@ -80,6 +80,10 @@ This function works by intancing two variables, one for file lines, and another 
 
 Thanks to the os.walk() function, recusrive actions are very easy to do, which what makes this possible along with many other recursive actions within other functions.
 
+The ``compareFiles`` Function:
+------------------------------
+
+This function works by iterating through an enumeration of two lists (one containing the contents of a file, and the other list containing the contents of another file). It gathers the difference in each line (if there is a difference).
 
 The **fileOperands** class
 ==========================

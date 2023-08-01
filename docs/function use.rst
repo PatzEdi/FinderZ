@@ -236,6 +236,17 @@ The above code takes in .py (python files) only, as we have added .py in the fil
 
 The recursive option is set to true, so it will scan every (Python) file recursively in each directory, and files are returned with the returnFileAmount parameter set to True.
 
+``compareFiles``
+----------------
+
+This function can used in order to compare two files and what differences they have in their contents.
+
+.. code-block:: python
+
+    diff_lines = GatherInfo.compareFiles('/path/to/file', '/path/to/file2', comparison_output_file = '/path/to/comparison_file')
+
+The comparison file is a file to write to when the whole comparison process is done. This is completely optional.
+
 **fileOperands** Usage
 ======================
 

@@ -56,18 +56,15 @@ class GatherInfo:
 	def computeHash(path):
 		
 		h = hashlib.sha1()
-		#Add try except block (to avoid duplicate directory errors in Synchronize class
-		try:
-			with open(path,'rb') as file:
+		
+		with open(path,'rb') as file:
+			
+			chunk = 0
+			while chunk != b'':
+					chunk = file.read(1024)
+					h.update(chunk)
 				
-				chunk = 0
-				while chunk != b'':
-						chunk = file.read(1024)
-						h.update(chunk)	
-			return h.hexdigest()
-		except:
-			#Return False if unhashable
-			return False
+		return h.hexdigest()
     
     #New in V2: Comparing two lists for at least one common element:
 	def isOneInCommon(list1, list2):
@@ -167,29 +164,13 @@ class GatherInfo:
 			return totalamount, fileAmount
 		else:
 			return totalamount
-		
-	#New in 2.0.4
-	def compareFiles(file1, file2, comparison_output_file = ''):
-		with open(file1, 'r') as f1, open(file2, 'r') as f2:
-			f1_lines = f1.readlines()
-			f2_lines = f2.readlines()
-			output_lines = []
-			for i, (line1, line2) in enumerate(zip(f1_lines, f2_lines)):
-				if line1 != line2:
-					difference = f"\nLine {i+1}:\nFile1: {line1} File2: {line2}\n"
-					print(difference)
-					output_lines.append(difference)
-		if comparison_output_file != '':
-			f = open(comparison_output_file)
-			f.writelines(output_lines)
-			f.close()
-		return output_lines
+
 class fileOperands:
 	#New recursive option to find files containing a global keyword, and new exactSearch function to replace the whole findFile funtion:
 	def findFiles(fileName, path, exactSearch = False, recursive = False, regex = False):
 		#Main results list to return at the end:
 		results = []
-		
+		print(regex)
 		if recursive == True:
 			for root, dirs, files in os.walk(path):
 				files = ' '.join(files)
@@ -568,6 +549,7 @@ class fileOperands:
 	def copyDir(originalDir, newDir):
 			lastdir = os.path.basename(os.path.normpath(originalDir))
 			newDirectory = os.path.join(newDir, lastdir)
+			print(newDirectory)
 			shutil.copytree(originalDir, newDirectory)
 			return True
 	def renameFile(newName, filePath):
@@ -658,61 +640,72 @@ class Logging:
 
 #Main Synchronize class:
 class Synchronize:
-	def backUpToSyncFolder(filePath, syncBackUpFolderName, maindir, syncdir):
+	def backUpToSyncFolder(filePath, syncBackUpFolderName):
 		
 		#This function returns a path, with an ending including the syncBackUpFolderName:
-		def getSyncBackUpFolderPath(maindir, syncdir, syncBackUpFolderName):
+		def getSyncBackUpFolderPath(filePath, syncBackUpFolderName):
 			
-			#Join the two paths:
-			syncBackUpFolderPathMain = os.path.join(maindir, f"{syncBackUpFolderName}")
+			
+			if os.path.isfile(filePath) == True:
+				filePath = os.path.split(filePath)[0]
+			
+			#Here, check if the given filePath and its last part is equal to the syncBackUpFolderName. If it is, then the given file path is actually automitcally equal to the syncBackUpFilePath:
+			if os.path.split(filePath)[1] == syncBackUpFolderName:
+				syncBackUpFolderName = filePath
+				return syncBackUpFolderName
+			#Read the directories in the given path:
+			directoriesInDir = GatherInfo.readDir(filePath, returnFiles = False)
+			#Step two: scan the directories in the given path for the syncBackUpFolderName:
+			#Do a quick first check to check if the given path already includes the _syncBackups folder:
+			if syncBackUpFolderName in directoriesInDir:
+				#Join them together:
+				#Get the syncBackUpFolderPath
+				syncBackUpFolderPath = os.path.join(filePath, syncBackUpFolderName)
+			else:
+				dummyFilePath = filePath
+				#While the syncBackUpFolderName is not in the list of directories within the given path, go abckwards a path:
+				while syncBackUpFolderName not in directoriesInDir:
+					#Get one path before the given path:
+					backPath = os.path.split(dummyFilePath)[0]
+					#Set the dummyFilePath equal to the backPath:
+					dummyFilePath = backPath
+					directoriesInDir = GatherInfo.readDir(dummyFilePath, returnFiles = False)
+					
+					
+				#Get the syncBackUpFolderPath
+				syncBackUpFolderPath = os.path.join(dummyFilePath, syncBackUpFolderName)
 
-			syncBackUpFolderPathSync = os.path.join(syncdir, f"{syncBackUpFolderName}")
-			return syncBackUpFolderPathMain, syncBackUpFolderPathSync
+			return syncBackUpFolderPath
 		
 		#Check whether or not the filePath is in the syncBackUpFolder. If it is, dont execute it:
 		if syncBackUpFolderName in filePath:
 			return False
 		#Step 1: retreive the syncBackUpFolderPath
-		syncBackUpFolderPathMain, syncBackUpFolderPathSync = getSyncBackUpFolderPath(maindir, syncdir, syncBackUpFolderName)
+		syncBackUpFolderPath = getSyncBackUpFolderPath(filePath, syncBackUpFolderName)
 		
 		#Once we have the syncBackUpFolderPath, we can then, copy the file or directory within the parametric filePath variable, and move it to the syncBackUpFolderPath.
 		singleComponent = os.path.split(filePath)[1]
 
-		isExistingInSyncBackUpFolderDirectory_Main = os.path.join(syncBackUpFolderPathMain, singleComponent)
-		isExistingInSyncBackUpFolderDirectory_Sync = os.path.join(syncBackUpFolderPathSync, singleComponent)
+		isExistingInSyncBackUpFolderDirectory = os.path.join(syncBackUpFolderPath, singleComponent)
 
 		#If the path leads to a file:
 		if os.path.isfile(filePath):
 			#Here, check whether or not the file already exists within the syncBackUpFolderPath:
-
-			#Main Path:
-			if os.path.exists(isExistingInSyncBackUpFolderDirectory_Main) == True:
-				os.remove(isExistingInSyncBackUpFolderDirectory_Main)
+			if os.path.exists(isExistingInSyncBackUpFolderDirectory) == True:
+				os.remove(isExistingInSyncBackUpFolderDirectory)
 			
-			fileOperands.copyFile(filePath, syncBackUpFolderPathMain)
-
-			#Sync Path:
-			if os.path.exists(isExistingInSyncBackUpFolderDirectory_Sync) == True:
-				os.remove(isExistingInSyncBackUpFolderDirectory_Sync)
-			
-			fileOperands.copyFile(filePath, syncBackUpFolderPathSync)
+			fileOperands.copyFile(filePath, syncBackUpFolderPath)
 		
 		#If the path leads to a directory:
 		if os.path.isdir(filePath):
 			#Here, check whether or not the directory already exists within the syncBackUpFolderPath:
+			if os.path.exists(isExistingInSyncBackUpFolderDirectory) == True:
+				shutil.rmtree(isExistingInSyncBackUpFolderDirectory)
+			fileOperands.copyDir(filePath, syncBackUpFolderPath)
 			
-			#Main path:
-			if os.path.exists(isExistingInSyncBackUpFolderDirectory_Main) == True:
-				shutil.rmtree(isExistingInSyncBackUpFolderDirectory_Main)
-			fileOperands.copyDir(filePath, syncBackUpFolderPathMain)
-			
-			#Sync path:
-			if os.path.exists(isExistingInSyncBackUpFolderDirectory_Sync) == True:
-				shutil.rmtree(isExistingInSyncBackUpFolderDirectory_Sync)
-			fileOperands.copyDir(filePath, syncBackUpFolderPathSync)
 	
 	#IMPORTANT: Important directories flag is used to never delete certain directories that start with a specific character (default = _ ). The importantFilesFlag is important as it may prevent deletion of directories!
-	def synchronizeComponents(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir):
+	def synchronizeComponents(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool):
 		
 		logList = []
 		#Checks whether or not the directory or file is important by checking the first character of the string:
@@ -743,10 +736,7 @@ class Synchronize:
 						if len(files) != 0:
 							for file in files:
 								Hash = GatherInfo.computeHash(file)
-								if Hash == False:
-									pass
-								else:
-									parentdirHashes.append(Hash)
+							parentdirHashes.append(Hash)
 			
 			#Second, iterate through parentdir2 files:
 			if len(parent2dirs) != 0:
@@ -757,14 +747,14 @@ class Synchronize:
 						if len(files) != 0:
 							for file in files:
 								Hash = GatherInfo.computeHash(file)
-								if Hash == False:
-									pass
-								else:
-									parentdir2Hashes.append(Hash)
+							parentdir2Hashes.append(Hash)
+			
 			matchBoolean = GatherInfo.isOneInCommon(parentdirHashes, parentdir2Hashes)
 			
 			return matchBoolean
 			
+
+
 		#The main merge function: Merges the important files and directories together in order to avoid loss of files. Worst case scenario, the deleted files will end up in the syncBackups folder:
 		def mergeFiles(parentdir, parentdir2, parentfiles, parent2files):
 			#For parentdir:
@@ -778,22 +768,17 @@ class Synchronize:
 				for file in parentfiles:
 					fullpath = os.path.join(parentdir, file)
 					Hash = GatherInfo.computeHash(fullpath)
-					if Hash == False:
-						pass
-					else:
-						parentdirHashes.append(Hash)
+					parentdirHashes.append(Hash)
 			
 			#Second, iterate through parentdir2 files:
 			if len(parent2files) != 0:
 				for file in parent2files:
 					fullpath = os.path.join(parentdir2, file)
-					Hash = GatherInfo.computeHash(fullpath) #Problem lies here:
-					if Hash == False:
-						pass
-					else:
-						parentdir2Hashes.append(Hash)
+					Hash = GatherInfo.computeHash(fullpath)
+					parentdir2Hashes.append(Hash)
 			
 			#Now, for the comparison:
+
 			matchBoolean = GatherInfo.isOneInCommon(parentdirHashes, parentdir2Hashes)
 			
 			return matchBoolean
@@ -801,7 +786,7 @@ class Synchronize:
 			#We can return a boolean. True = mathing. False = not matching. Based on this boolean, we can then execute either deleting or merging.
 			
 		#Main class that takes in dir1, dir2, separates the files and dirs, makes the comparisons, and adds/removes the files, or even renames directories.
-		def main(parentdir, parentdir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir):
+		def main(parentdir, parentdir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool):
 			
 			logList = []
 			#Get the source components of the parentdir and parentdir2:
@@ -846,6 +831,8 @@ class Synchronize:
 					#Log it:
 					newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing additional files:", dir1 = os.path.join(parentdir2, file), dir2 = f'Removing file from {parentdir}', dir1Action = 'File found at ', dir2Action = f'but not found in {parentdir}', logTag = 'C')
 					logList.extend(newLogList)
+
+
 					isMatching = mergeFiles(parentdir, parentdir2, parentfiles, parent2files)
 
 					directory = os.path.join(parentdir2, file)
@@ -870,13 +857,14 @@ class Synchronize:
 							else:
 								#Check if the user wants a backup folder or not:
 								if syncBackUpFolderExists:
-									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName, maindir, syncdir)
+									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName)
 								
 								#Log it:
 								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {file} from {parentdir2}, as it doesn't exist in {parentdir}", logTag = 'C')
 								logList.extend(newLogList)
 								os.remove(directory)
 					elif isMatching == False:
+
 						#Log it:
 						
 						#Merge the directories as well:
@@ -888,6 +876,7 @@ class Synchronize:
 								dirDirectory = os.path.join(parentdir2, dir)
 
 								dirDirectoryParent = os.path.join(parentdir, dir)
+								print(dirDirectory)
 								
 								#Copy the files and the directories:
 								if os.path.exists(dirDirectoryParent) == False:
@@ -905,7 +894,7 @@ class Synchronize:
 
 
 					isMatching = mergeDirectories(parentdir, parentdir2, parentdirs, parent2dirs)
-					
+
 					directory = os.path.join(parentdir2, dir)
 
 					if isMatching == True or len(parentdirs) < 1:
@@ -928,7 +917,7 @@ class Synchronize:
 							else:
 								#Backup:
 								if syncBackUpFolderExists:
-									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName, maindir, syncdir)
+									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName)
 								
 								#Log it:
 								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {directory} and all of its contents, as it is directory {parentdir2}, but not in {parentdir}", logTag= 'C')
@@ -969,22 +958,22 @@ class Synchronize:
 				mainfiletime = os.path.getmtime(maindirpath)
 
 				dirsyncfiletime = os.path.getmtime(dirsyncpath)
-				#Compute hashes (hot fix 2.0.4)
-				if (GatherInfo.computeHash(maindirpath) != GatherInfo.computeHash(dirsyncpath)):
-					if (mainfiletime > dirsyncfiletime):
-						#Remove and copy the file:
-						os.remove(dirsyncpath)
-						fileOperands.copyFile(maindirpath, os.path.split(dirsyncpath)[0])
-						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = maindirpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {dirsyncpath}.', logTag = 'C')
-						logList.extend(newLogList)
-					elif mainfiletime < dirsyncfiletime:
-						os.remove(maindirpath)
-						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = dirsyncpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {maindirpath}.', logTag = 'C')
-						logList.extend(newLogList)
-						fileOperands.copyFile(dirsyncpath, os.path.split(maindirpath)[0])
+
+				
+				if mainfiletime > dirsyncfiletime:
+					#Remove and copy the file:
+					os.remove(dirsyncpath)
+					fileOperands.copyFile(maindirpath, os.path.split(dirsyncpath)[0])
+					newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = maindirpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {dirsyncpath}.')
+					logList.extend(newLogList)
+				elif mainfiletime < dirsyncfiletime:
+					os.remove(maindirpath)
+					newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = dirsyncpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {maindirpath}.')
+					logList.extend(newLogList)
+					fileOperands.copyFile(dirsyncpath, os.path.split(maindirpath)[0])
 			return logList
 		#Execute the main function:		
-		newLogList = main(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir)
+		newLogList = main(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool)
 		logList.extend(newLogList)
 		
 		return logList
@@ -1027,8 +1016,6 @@ class Synchronize:
 		dir1 = Synchronize.organizePathSlashes(dir1)
 		dir2 = Synchronize.organizePathSlashes(dir2)
 
-		maindir = dir1
-		syncdir = dir2
 		#Get the time of when the folders were last modified:
 		# dir1ti_m = os.path.getmtime(dir1)
 		# dir2ti_m = os.path.getmtime(dir2)
@@ -1100,7 +1087,7 @@ class Synchronize:
 				logList.extend(newLogList)
 				
 				#Set the newLogList equal to the log that the function returns:
-				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir)
+				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool)
 				logList.extend(newLogList)
 
 		elif float(dir1time) < float(dir2time):
@@ -1114,7 +1101,7 @@ class Synchronize:
 				logList.extend(newLogList)
 
 				#Set the newLogList equal to the log that the function returns:
-				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir)
+				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool)
 				
 		
 				logList.extend(newLogList)
