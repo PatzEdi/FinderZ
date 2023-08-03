@@ -32,6 +32,10 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
+**Minor Fix Version 2.0.5:**
+1. Added log_non_critical parameter in the Synchronize and Backup class functions. If put to False, only critical actions will be displayed, resulting in a minimized log.
+2. Fixed file updating in Backup class by adding hash computation to the backup function when updating files. This was already in the Synchronize class.
+3. Fixed the Backup directories error (I thought this was already fixed before, but it is totally fixed now.)
 
 **Minor Fix Version 2.0.4:**
 - Fixed bug where removing more than one file at a time gave an existence error. Sorry for that!

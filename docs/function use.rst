@@ -502,7 +502,7 @@ The **Synchronization** class is filled with features that are super useful to s
 
 The ``synchronize`` function takes in two required parameters. That's it! These are: dir1 (str), dir2 (str)
 
-It also takes in four optional parameters: importantFilesFlag (str), syncBackUpFolderExists (boolean), loggingBool (boolean), logCreationPath (str).
+It also takes in five optional parameters: importantFilesFlag (str), syncBackUpFolderExists (boolean), loggingBool (boolean), logCreationPath (str), log_non_critical (bool).
 
 If you want to most basic usage, you can execute it like so:
 
@@ -541,9 +541,9 @@ If you want to use logging, all you need to do is set the loggingBool to True, a
 
 .. code-block:: python
 
-    Synchronize.synchronize("/path/to/dir1", "/path/to/dir2", loggingBool = True, logCreationPath = '/path/to/logcreationdir')
+    Synchronize.synchronize("/path/to/dir1", "/path/to/dir2", loggingBool = True, logCreationPath = '/path/to/logcreationdir', log_non_critical = True)
 
-A log will have log tags, which are either NC (Non critical) or C (Critical). This is used in order to easily find the more important activites (C), such as removing or adding files.
+A log will have log tags, which are either NC (Non critical) or C (Critical). This is used in order to easily find the more important activites (C), such as removing or adding files. You can disable non-critical (and only view critical) logging by setting log_non_critical to False. This can help with minimizing the size of the output log.
 
 A log will also have the time at which each process happened. It may seem like the time never changes, but this is solely due to the fact that the function executes very fast (so it will usually remain within the same second by the time the whole process ends)
 
@@ -570,7 +570,7 @@ Both of these functions, unlike the ``synchronize`` function in the **Synchroniz
 
 .. code-block:: python
 
-    Backup.backup("/path/to/maindir", ["/path/to/backupdir1", "/path/to/backupdir2"], loggingBool = True, logCreationPath = '/path/to/logcreationdir')
+    Backup.backup("/path/to/maindir", ["/path/to/backupdir1", "/path/to/backupdir2"], loggingBool = True, logCreationPath = '/path/to/logcreationdir', log_non_critical = True)
 
 The above code backs up everything in maindir to backupdir1 and backupdir2. Of course, you can have more than two backup dirs, but there are two just as an example. Here, logging is enabled, so that will work. 
 
