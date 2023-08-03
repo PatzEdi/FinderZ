@@ -32,10 +32,12 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
-**Minor Fix Version 2.0.5:**
+**Minor Fix Version 2.0.6:**
 1. Added log_non_critical parameter in the Synchronize and Backup class functions. If put to False, only critical actions will be displayed, resulting in a minimized log.
 2. Fixed file updating in Backup class by adding hash computation to the backup function when updating files. This was already in the Synchronize class.
 3. Fixed the Backup directories error (I thought this was already fixed before, but it is totally fixed now.)
+
+**Hot fix 2.0.5 had an issue in the Backup class, 2.0.6 fixes it.**
 
 **Minor Fix Version 2.0.4:**
 - Fixed bug where removing more than one file at a time gave an existence error. Sorry for that!
@@ -44,11 +46,6 @@ To check out the details of V2, go to the [documentation](https://finderz.readth
 - Removed unnecessary printing in some functions.
 - Added a file comparison function in GatherInfo
 - Currently, after having tested FinderZ on Android, permission errors may occasionally occur. This is likely due to read/write permissions assigned to a specific file.
-
-**Minor Fix Version 2.0.3:**
-- Fixed bug in Backup class that gave an existence error. Sorry about that!
-- I have noticed some accidental printing in some functions (such as findFiles, that prints a boolean at the start). This does not currently affect anything, but just prints out occasional, unnecessary output. This will be fixed very soon.
-- Thank you for 16K Downloads!
 
 ## **Usage**
 Installation:

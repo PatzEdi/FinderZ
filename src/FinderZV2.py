@@ -1226,9 +1226,15 @@ class Backup:
 		for folder, dirs, files in os.walk(maindir):
 			
 			childdir = (folder.split(maindir,1)[1])
+			#Replace the first slash:
+			try:
+				if childdir[0] == "/" or childdir[0] == "\\":
+					childdir = childdir[1:]
+			except:
+				pass
 			backupdir = Synchronize.organizePathSlashes(backupdir)
 			#Here, the very start is blank because the childdir is blank (Perhaps, just leave it as is? It does not really matter)
-			backUpFullPath = os.path.join(backupdir, childdir.replace("/", '', 1))
+			backUpFullPath = os.path.join(backupdir, childdir)
 			#Log it:
 			newLogList = Logging.Log(loggingBool, logList, announcement = "Entering main loop under mainIteration function", dir1 = childdir, dir2 = backUpFullPath, dir1Action = "Merged child path string '", dir2Action = "' into sync path:", log_non_critical=log_non_critical)
 			logList.extend(newLogList)

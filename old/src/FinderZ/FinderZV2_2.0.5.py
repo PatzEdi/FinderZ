@@ -590,7 +590,7 @@ class fileOperands:
 #The main logging class (Used in Synchronize and Backup classes)
 class Logging:
 	#Here, the announcement is simply something to announce/thecurrent/main activity or in this case print. dir is the parameter that takes in dir. dirAction consists of things like removing, adding, or copying, renaming, etc.
-	def Log(loggingBool, logList, announcement = '', dir1 = '', dir2 = '', dir1Action = '', dir2Action = '', logTag = 'NC'):
+	def Log(loggingBool, logList, announcement = '', dir1 = '', dir2 = '', dir1Action = '', dir2Action = '', logTag = 'NC', log_non_critical = True):
 		#'NC' = Not Critical, 'C' is Critical, for the logTag
 		#Check if the boolean loggingBool is True, to determine whether or not the User actually wants to log or not:
 		
@@ -630,10 +630,17 @@ class Logging:
 				
 				return newLogList
 
-			
-			printAnnouncement(announcement, currentTime)
-			
-			newLogList = logDirectories(newLogList, dir1, dir2, dir1Action, dir2Action, currentTime)
+			#Apply non-critical filter:
+			if log_non_critical == False:
+				if logTag != 'NC':
+
+					printAnnouncement(announcement, currentTime)
+					
+					newLogList = logDirectories(newLogList, dir1, dir2, dir1Action, dir2Action, currentTime)
+			else:
+				printAnnouncement(announcement, currentTime)
+					
+				newLogList = logDirectories(newLogList, dir1, dir2, dir1Action, dir2Action, currentTime)
 		else:
 			return logList
 
@@ -711,8 +718,8 @@ class Synchronize:
 				shutil.rmtree(isExistingInSyncBackUpFolderDirectory_Sync)
 			fileOperands.copyDir(filePath, syncBackUpFolderPathSync)
 	
-	#IMPORTANT: Important directories flag is used to never delete certain directories that start with a specific character (default = _ ). The importantFilesFlag is important as it may prevent deletion of directories!
-	def synchronizeComponents(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir):
+	#IMPORTANT: Important files flag is used to never delete certain files that start with a specific character (default = _ ). The importantFilesFlag is important as it may prevent deletion of files/dirs!
+	def synchronizeComponents(dir1, dir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir, log_non_critical = True):
 		
 		logList = []
 		#Checks whether or not the directory or file is important by checking the first character of the string:
@@ -801,7 +808,7 @@ class Synchronize:
 			#We can return a boolean. True = mathing. False = not matching. Based on this boolean, we can then execute either deleting or merging.
 			
 		#Main class that takes in dir1, dir2, separates the files and dirs, makes the comparisons, and adds/removes the files, or even renames directories.
-		def main(parentdir, parentdir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir):
+		def main(parentdir, parentdir2, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir, log_non_critical = log_non_critical):
 			
 			logList = []
 			#Get the source components of the parentdir and parentdir2:
@@ -816,7 +823,7 @@ class Synchronize:
 			for dir in parentdirs:
 				if dir not in parent2dirs:
 
-					newLogList = Logging.Log(loggingBool, logList, announcement = f"Adding directories that exist in mainpath but not in syncpath (missing/extra).", dir1 = f"'{dir}'", dir2 = parentdir2, dir1Action = 'Found directory', dir2Action = f'in {parentdir}, but not in', logTag = "C")
+					newLogList = Logging.Log(loggingBool, logList, announcement = f"Adding directories that exist in mainpath but not in syncpath (missing/extra).", dir1 = f"'{dir}'", dir2 = parentdir2, dir1Action = 'Found directory', dir2Action = f'in {parentdir}, but not in', logTag = "C", log_non_critical = log_non_critical)
 					logList.extend(newLogList)
 					#If the directory is not in the folder to sync to, then it adds it:
 					path = os.path.join(parentdir2, dir)
@@ -826,7 +833,7 @@ class Synchronize:
 				if file not in parent2files:
 					originalpath = os.path.join(parentdir, file)
 
-					newLogList = Logging.Log(loggingBool, logList, announcement = f"Adding files that exist in mainpath but not in syncpath (missing/extra).", dir1 = f"'{file}'", dir2 = parentdir2, dir1Action = 'Found file', dir2Action = f'in {parentdir}, but not in', logTag = 'C')
+					newLogList = Logging.Log(loggingBool, logList, announcement = f"Adding files that exist in mainpath but not in syncpath (missing/extra).", dir1 = f"'{file}'", dir2 = parentdir2, dir1Action = 'Found file', dir2Action = f'in {parentdir}, but not in', logTag = 'C', log_non_critical = log_non_critical)
 					logList.extend(newLogList)
 					fileOperands.copyFile(originalpath, parentdir2)
 
@@ -844,7 +851,7 @@ class Synchronize:
 				if file not in parentfiles:
 					
 					#Log it:
-					newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing additional files:", dir1 = os.path.join(parentdir2, file), dir2 = f'Removing file from {parentdir}', dir1Action = 'File found at ', dir2Action = f'but not found in {parentdir}', logTag = 'C')
+					newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing additional files:", dir1 = os.path.join(parentdir2, file), dir2 = f'Removing file from {parentdir}', dir1Action = 'File found at ', dir2Action = f'but not found in {parentdir}', logTag = 'C', log_non_critical = log_non_critical)
 					logList.extend(newLogList)
 					isMatching = mergeFiles(parentdir, parentdir2, parentfiles, parent2files)
 
@@ -852,12 +859,12 @@ class Synchronize:
 
 					if isMatching == True or len(parentfiles) < 1:
 						
-						newLogList = Logging.Log(loggingBool, logList, announcement = "Skipping file and directory merging as some files/dirs are matching.", logTag = 'C')
+						newLogList = Logging.Log(loggingBool, logList, announcement = "Skipping file and directory merging as some files/dirs are matching.", logTag = 'C', log_non_critical = log_non_critical)
 						logList.extend(newLogList)
 						#Check if the files are important files. If they are, do not remove them, but rather copy them to the parent dir:
 						if isImportantFile(directory, importantFilesFlag) == True:
 							#Log it:
-							newLogList = Logging.Log(loggingBool, logList, announcement = f"'{directory}' is an important file, as the first character matches the importantFilesFlag. Restoring...", logTag = 'C')
+							newLogList = Logging.Log(loggingBool, logList, announcement = f"'{directory}' is an important file, as the first character matches the importantFilesFlag. Restoring...", logTag = 'C', log_non_critical = log_non_critical)
 							logList.extend(newLogList)
 
 							fileOperands.copyFile(directory, os.path.join(parentdir))
@@ -873,7 +880,7 @@ class Synchronize:
 									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName, maindir, syncdir)
 								
 								#Log it:
-								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {file} from {parentdir2}, as it doesn't exist in {parentdir}", logTag = 'C')
+								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {file} from {parentdir2}, as it doesn't exist in {parentdir}", logTag = 'C', log_non_critical = log_non_critical)
 								logList.extend(newLogList)
 								os.remove(directory)
 					elif isMatching == False:
@@ -883,7 +890,7 @@ class Synchronize:
 						for dir in parent2dirs:
 							if dir not in parentdirs:
 								#Log it:
-								newLogList = Logging.Log(loggingBool, logList, announcement = "Merging files and dirs, as no files/dirs are matching.", dir1 = dir, dir2 = f"'{parentdir}'. Merging directories...", dir1Action = "Directory '", dir2Action = f"' exists in {parentdir2}, but not in", logTag = 'C')
+								newLogList = Logging.Log(loggingBool, logList, announcement = "Merging files and dirs, as no files/dirs are matching.", dir1 = dir, dir2 = f"'{parentdir}'. Merging directories...", dir1Action = "Directory '", dir2Action = f"' exists in {parentdir2}, but not in", logTag = 'C', log_non_critical = log_non_critical)
 								logList.extend(newLogList)
 								dirDirectory = os.path.join(parentdir2, dir)
 
@@ -894,7 +901,7 @@ class Synchronize:
 									fileOperands.copyDir(dirDirectory, os.path.join(parentdir))
 						
 						#Log list:
-						newLogList = Logging.Log(loggingBool, logList, announcement = f"Merging missing file: {file} into {parentdir}", logTag = 'C')
+						newLogList = Logging.Log(loggingBool, logList, announcement = f"Merging missing file: {file} into {parentdir}", logTag = 'C', log_non_critical = log_non_critical)
 						logList.extend(newLogList)
 						fileOperands.copyFile(directory, os.path.join(parentdir))
 			#To deal with directories: (remove from folder to sync to:)
@@ -910,13 +917,13 @@ class Synchronize:
 
 					if isMatching == True or len(parentdirs) < 1:
 						#Log it: CONTINUE HERE
-						newLogList = Logging.Log(loggingBool, logList, announcement = "Skipping file and directory merging as some files/dirs are matching.")
+						newLogList = Logging.Log(loggingBool, logList, announcement = "Skipping file and directory merging as some files/dirs are matching.", log_non_critical = log_non_critical)
 						logList.extend(newLogList)
 						
 						#Check if it is important directory:
 						if isImportantFile(directory, importantFilesFlag) == True:
 							#Log it:
-							newLogList = Logging.Log(loggingBool, logList, announcement = f"'{directory}' is an important directory, as the first character matches the importantFilesFlag. Restoring...", logTag ='C')
+							newLogList = Logging.Log(loggingBool, logList, announcement = f"'{directory}' is an important directory, as the first character matches the importantFilesFlag. Restoring...", logTag ='C', log_non_critical = log_non_critical)
 							logList.extend(newLogList)
 							
 							fileOperands.copyDir(directory, os.path.join(parentdir))
@@ -931,7 +938,7 @@ class Synchronize:
 									Synchronize.backUpToSyncFolder(directory, syncBackUpFolderName, maindir, syncdir)
 								
 								#Log it:
-								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {directory} and all of its contents, as it is directory {parentdir2}, but not in {parentdir}", logTag= 'C')
+								newLogList = Logging.Log(loggingBool, logList, announcement = f"Removing {directory} and all of its contents, as it is directory {parentdir2}, but not in {parentdir}", logTag= 'C', log_non_critical = log_non_critical)
 								logList.extend(newLogList)
 
 								shutil.rmtree(directory)
@@ -943,7 +950,7 @@ class Synchronize:
 								parentFileDirectory = os.path.join(parentdir, file)
 
 								#Log it:
-								newLogList = Logging.Log(loggingBool, logList, announcement = "Merging files and dirs, as no files/dirs are matching.", dir1 = file, dir2 = f"'{parentdir}'. Merging Files...", dir1Action = "File '", dir2Action = f"' exists in {parentdir2}, but not in", logTag = 'C')
+								newLogList = Logging.Log(loggingBool, logList, announcement = "Merging files and dirs, as no files/dirs are matching.", dir1 = file, dir2 = f"'{parentdir}'. Merging Files...", dir1Action = "File '", dir2Action = f"' exists in {parentdir2}, but not in", logTag = 'C', log_non_critical = log_non_critical)
 								logList.extend(newLogList)
 
 								#Copy the files and the directories:
@@ -953,7 +960,7 @@ class Synchronize:
 						#Add a try except block in case the function above this one already took care of the directories:
 						try:
 
-							newLogList = Logging.Log(loggingBool, logList, announcement = f"Copying missing dir: {dir}, into {parentdir}", logTag = 'C')
+							newLogList = Logging.Log(loggingBool, logList, announcement = f"Copying missing dir: {dir}, into {parentdir}", logTag = 'C', log_non_critical = log_non_critical)
 							logList.extend(newLogList)
 
 							fileOperands.copyDir(directory, os.path.join(parentdir))
@@ -975,11 +982,11 @@ class Synchronize:
 						#Remove and copy the file:
 						os.remove(dirsyncpath)
 						fileOperands.copyFile(maindirpath, os.path.split(dirsyncpath)[0])
-						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = maindirpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {dirsyncpath}.', logTag = 'C')
+						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = maindirpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {dirsyncpath}.', logTag = 'C', log_non_critical = log_non_critical)
 						logList.extend(newLogList)
 					elif mainfiletime < dirsyncfiletime:
 						os.remove(maindirpath)
-						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = dirsyncpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {maindirpath}.', logTag = 'C')
+						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating file contents:", dir1 = dirsyncpath, dir2 = "Updating file.", dir1Action = 'File at path', dir2Action = f'was modified before file {maindirpath}.', logTag = 'C', log_non_critical = log_non_critical)
 						logList.extend(newLogList)
 						fileOperands.copyFile(dirsyncpath, os.path.split(maindirpath)[0])
 			return logList
@@ -1005,14 +1012,14 @@ class Synchronize:
 			os.mkdir(syncBackUpFolderName)
 
 	#For synchronizing files and dirs (The main function:)
-	def synchronize(dir1, dir2, importantFilesFlag = '_', syncBackUpFolderExists = True, loggingBool = False, logCreationPath = ''):
+	def synchronize(dir1, dir2, importantFilesFlag = '_', syncBackUpFolderExists = True, loggingBool = False, logCreationPath = '', log_non_critical = True):
 		
 		#The main logList:
 		logList = []
 
 		#Log it:
 		#Check if the user actually wants to create a syncBackUpFolder (It is recommended in order to reduce the chances of accidental file loss!)
-		newLogList = Logging.Log(loggingBool, logList, announcement = f"Running in mode SYNCHRONIZATION: importantFilesFlag = '{importantFilesFlag}', syncBackUpFolderExists = {syncBackUpFolderExists}", logTag = 'C')
+		newLogList = Logging.Log(loggingBool, logList, announcement = f"Running in mode SYNCHRONIZATION: importantFilesFlag = '{importantFilesFlag}', syncBackUpFolderExists = {syncBackUpFolderExists}", logTag = 'C', log_non_critical = log_non_critical)
 		#Append to the logList
 		logList.extend(newLogList)
 		#Initialize the backup directory:
@@ -1080,7 +1087,7 @@ class Synchronize:
 		dir2time = max(dir2ti_m)
 
 		#Log it:
-		newLogList = Logging.Log(loggingBool, logList, announcement = f"Recursively got the time last modified for each directory: {dir1time} for {dir1} and {dir2time} for {dir2}",)
+		newLogList = Logging.Log(loggingBool, logList, announcement = f"Recursively got the time last modified for each directory: {dir1time} for {dir1} and {dir2time} for {dir2}", log_non_critical = log_non_critical)
 		#Append to the logList
 		logList.extend(newLogList)
 
@@ -1095,12 +1102,12 @@ class Synchronize:
 				
 				syncpath = os.path.join(dir2, childdir)
 
-				newLogList = Logging.Log(loggingBool, logList, announcement = f"Iterating through main loop with {dir1} as the main dir, as {dir2} has an older modification time.", dir1 = folder, dir2 = syncpath, dir1Action = 'Entering child directory', dir2Action = "to compare files and dirs with ")
+				newLogList = Logging.Log(loggingBool, logList, announcement = f"Iterating through main loop with {dir1} as the main dir, as {dir2} has an older modification time.", dir1 = folder, dir2 = syncpath, dir1Action = 'Entering child directory', dir2Action = "to compare files and dirs with ", log_non_critical = log_non_critical)
 				#Append to the logList
 				logList.extend(newLogList)
 				
 				#Set the newLogList equal to the log that the function returns:
-				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir)
+				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir, log_non_critical = log_non_critical)
 				logList.extend(newLogList)
 
 		elif float(dir1time) < float(dir2time):
@@ -1109,12 +1116,12 @@ class Synchronize:
 				childdir = (folder.split(dir2,1)[1])
 				syncpath = os.path.join(dir1, childdir)
 
-				newLogList = Logging.Log(loggingBool, logList, announcement = f"Iterating through main loop with {dir2} as the main dir, as {dir1} has an older modification time.", dir1 = folder, dir2 = syncpath, dir1Action = 'Entering child directory', dir2Action = "to compare files and dirs with ")
+				newLogList = Logging.Log(loggingBool, logList, announcement = f"Iterating through main loop with {dir2} as the main dir, as {dir1} has an older modification time.", dir1 = folder, dir2 = syncpath, dir1Action = 'Entering child directory', dir2Action = "to compare files and dirs with ", log_non_critical = log_non_critical)
 				#Append to the logList
 				logList.extend(newLogList)
 
 				#Set the newLogList equal to the log that the function returns:
-				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir)
+				newLogList = Synchronize.synchronizeComponents(folder, syncpath, syncBackUpFolderName, syncBackUpFolderExists, importantFilesFlag, loggingBool, maindir, syncdir, log_non_critical = log_non_critical)
 				
 		
 				logList.extend(newLogList)
@@ -1126,7 +1133,7 @@ class Synchronize:
 #Class Backup: Unlike synchronization, this backs up to a 'child' directory, meaning that the 'child' directory plays no role on the parent one.
 class Backup:
 	#Capture the newLogList from the mainIteration function:
-	def main(parentmaindir, childbackupdir, loggingBool):
+	def main(parentmaindir, childbackupdir, loggingBool, log_non_critical = True):
 		
 		
 		
@@ -1135,11 +1142,12 @@ class Backup:
 		
 		
 		#Get the source components of the parentdir and childsyncdir (in order to compare them later:)
+		
 		maindirs, mainfiles = GatherInfo.readDir(parentmaindir)
 		syncdirs, syncfiles = GatherInfo.readDir(childbackupdir)
 		
 		#Log it:
-		newLogList = Logging.Log(loggingBool, logList, announcement = "Reading directories and files in the listed directories:", dir1 = parentmaindir, dir2 = childbackupdir, dir2Action = ',')
+		newLogList = Logging.Log(loggingBool, logList, announcement = "Reading directories and files in the listed directories:", dir1 = parentmaindir, dir2 = childbackupdir, dir2Action = ',', log_non_critical=log_non_critical)
 		#Append to the logList
 		logList.extend(newLogList)
 		
@@ -1149,7 +1157,7 @@ class Backup:
 				#If the directory is not in the folder to sync to, then it adds it:
 
 				#Log it:
-				newLogList = Logging.Log(loggingBool, logList, announcement = "Adding missing directories in the backup folder(s): ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"Dir '{dir}' found in", dir2Action = 'but not found in', logTag = 'C')
+				newLogList = Logging.Log(loggingBool, logList, announcement = "Adding missing directories in the backup folder(s): ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"Dir '{dir}' found in", dir2Action = 'but not found in', logTag = 'C', log_non_critical=log_non_critical)
 				#Append to the logList
 				logList.extend(newLogList)
 
@@ -1160,7 +1168,7 @@ class Backup:
 			if file not in syncfiles:
 				filepath = os.path.join(parentmaindir, file)
 
-				newLogList = Logging.Log(loggingBool, logList, announcement = "Adding missing files in the backup folder(s): ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}' found in", dir2Action = 'but not found in', logTag = 'C')
+				newLogList = Logging.Log(loggingBool, logList, announcement = "Adding missing files in the backup folder(s): ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}' found in", dir2Action = 'but not found in', logTag = 'C', log_non_critical=log_non_critical)
 				#Append to the logList
 				logList.extend(newLogList)
 
@@ -1171,7 +1179,7 @@ class Backup:
 			if dir not in maindirs:
 				
 				#Log it:
-				newLogList = Logging.Log(loggingBool, logList, announcement = "Removing extra directories in the backup folder: ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}' not found in", dir2Action = 'but found in backup folder. Removing from backup Folder:', logTag = 'C')
+				newLogList = Logging.Log(loggingBool, logList, announcement = "Removing extra directories in the backup folder: ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}' not found in", dir2Action = 'but found in backup folder. Removing from backup Folder:', logTag = 'C', log_non_critical=log_non_critical)
 				#Append to the logList
 				logList.extend(newLogList)
 				#If the directory is in the backup directory but not in the main dir, remove the dir from the backup (sync) directory:
@@ -1185,7 +1193,7 @@ class Backup:
 			if file not in mainfiles:
 				
 				#Log it:
-				newLogList = Logging.Log(loggingBool, logList, announcement = "Removing any extra files in the backup folder: ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}'not found in", dir2Action = 'but found in backup folder. Adding removing from backup Folder:', logTag = 'C')
+				newLogList = Logging.Log(loggingBool, logList, announcement = "Removing any extra files in the backup folder: ", dir1 = parentmaindir, dir2 = childbackupdir, dir1Action = f"File '{file}'not found in", dir2Action = 'but found in backup folder. Adding removing from backup Folder:', logTag = 'C', log_non_critical=log_non_critical)
 				logList.extend(newLogList)
 				
 				#If the backup directory has the file but the main one doesn't, remove it from the backup directory:
@@ -1201,43 +1209,43 @@ class Backup:
 				dirsyncfiletime = os.path.getmtime(dirsyncpath)
 
 				#If the file needs to be updated, remove the old one and copy the new one to the backup folder:
-				if mainfiletime > dirsyncfiletime:
-					#Remove and copy the file:
-					os.remove(dirsyncpath)
-					fileOperands.copyFile(maindirpath, os.path.split(dirsyncpath)[0])
-				
-					newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating content of file '{file}'", dir1 = dirsyncpath, dir2 = maindirpath, dir1Action = "Updating file content at '", dir2Action = f"' as file '{file}' in backup folder is older than")
-					logList.extend(newLogList)
+				if (GatherInfo.computeHash(maindirpath) != GatherInfo.computeHash(dirsyncpath)):
+					if mainfiletime > dirsyncfiletime:
+						#Remove and copy the file:
+						os.remove(dirsyncpath)
+						fileOperands.copyFile(maindirpath, os.path.split(dirsyncpath)[0])
+					
+						newLogList = Logging.Log(loggingBool, logList, announcement = f"Updating content of file '{file}'", dir1 = dirsyncpath, dir2 = maindirpath, dir1Action = "Updating file content at '", dir2Action = f"' as file '{file}' in backup folder is older than", logTag = 'C', log_non_critical=log_non_critical)
+						logList.extend(newLogList)
 		
 		#At the end of the main() function, return the logList
 		return logList
-	def mainIteration(maindir, backupdir, loggingBool):
+	def mainIteration(maindir, backupdir, loggingBool, log_non_critical = True):
 		
 		logList = []
 		for folder, dirs, files in os.walk(maindir):
 			
 			childdir = (folder.split(maindir,1)[1])
-
+			backupdir = Synchronize.organizePathSlashes(backupdir)
 			#Here, the very start is blank because the childdir is blank (Perhaps, just leave it as is? It does not really matter)
-
-			backUpFullPath = os.path.join(backupdir, childdir.replace("/", ''))
+			backUpFullPath = os.path.join(backupdir, childdir.replace("/", '', 1))
 			#Log it:
-			newLogList = Logging.Log(loggingBool, logList, announcement = "Entering main loop under mainIteration function", dir1 = childdir, dir2 = backUpFullPath, dir1Action = "Merged child path string '", dir2Action = "' into sync path:")
+			newLogList = Logging.Log(loggingBool, logList, announcement = "Entering main loop under mainIteration function", dir1 = childdir, dir2 = backUpFullPath, dir1Action = "Merged child path string '", dir2Action = "' into sync path:", log_non_critical=log_non_critical)
 			logList.extend(newLogList)
 			
 			#Transfer the newLogList to the main() function:
 
-			logListMain = Backup.main(folder, backUpFullPath, loggingBool)
+			logListMain = Backup.main(folder, backUpFullPath, loggingBool, log_non_critical = log_non_critical)
 
 			logList.extend(logListMain)
 		
 		#Return the logList, which is the file lines to write:
 		return logList
-	def backup(maindir, backupdirs, loggingBool = False, logCreationPath = ''):
+	def backup(maindir, backupdirs, loggingBool = False, logCreationPath = '', log_non_critical = True):
 		#Initialize the main logList:
 		logList = [] 
 		
-		newLogList = Logging.Log(loggingBool, logList, announcement = "Running in BACKUP mode:", logTag = 'C')
+		newLogList = Logging.Log(loggingBool, logList, announcement = "Running in BACKUP mode:", logTag = 'C', log_non_critical=log_non_critical)
 		
 		logList.extend(newLogList)
 		
@@ -1248,31 +1256,31 @@ class Backup:
 		#For every dir within the backup directories, backup:
 		for dir in backupdirs:
 			if len(backupdirs) > 1:
-				newLog = Logging.Log(loggingBool, logList, announcement = f"Multiple Directories were given. Now, backing up to directory: {dir}")
+				newLog = Logging.Log(loggingBool, logList, announcement = f"Multiple Directories were given. Now, backing up to directory: {dir}", log_non_critical=log_non_critical)
 				logList.extend(newLog)
-			newLogList = Backup.mainIteration(maindir, dir, loggingBool)
+			newLogList = Backup.mainIteration(maindir, dir, loggingBool, log_non_critical=log_non_critical)
 			logList.extend(newLogList)
 		#Write the logs:
 		
 		if loggingBool == True:
 			Logging.writeLogsToFile(logCreationPath, logList, 'backup')
-	def backgroundBackup(maindir, backupdirs, loggingBool = False, logCreationPath = '', refreshInterval = 8):
+	def backgroundBackup(maindir, backupdirs, loggingBool = False, logCreationPath = '', refreshInterval = 8, log_non_critical = True):
 
 		#Now, implement logging in the synchronization algorithm.
 		modeAnnounced = False
 		while True:
 			logList = []
 			if modeAnnounced == False:
-				newLogList = Logging.Log(loggingBool, logList, announcement = "Running in BACKGROUNDBACKUP mode:", logTag = 'C')
+				newLogList = Logging.Log(loggingBool, logList, announcement = "Running in BACKGROUNDBACKUP mode:", logTag = 'C', log_non_critical=log_non_critical)
 				logList.extend(newLogList)
 				modeAnnounced = True
 			
 			for dir in backupdirs:
 				
 				if len(backupdirs) > 1:
-					newLog = Logging.Log(loggingBool, logList, announcement = f"Multiple Directories were given. Now, backing up to directory: {dir}")
+					newLog = Logging.Log(loggingBool, logList, announcement = f"Multiple Directories were given. Now, backing up to directory: {dir}", log_non_critical=log_non_critical)
 					logList.extend(newLog)
-				newLogList = Backup.mainIteration(maindir, dir, loggingBool)
+				newLogList = Backup.mainIteration(maindir, dir, loggingBool, log_non_critical=log_non_critical)
 				logList.extend(newLogList)
 				#Write the logs to a file:
 			if loggingBool == True:
