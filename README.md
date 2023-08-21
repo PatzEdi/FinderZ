@@ -32,6 +32,8 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
+**Small Note**:
+FinderZ Will be updated to 2.0.7 soon to fix some minor bugs and include new features.
 **Minor Fix Version 2.0.6:**
 1. Added log_non_critical parameter in the Synchronize and Backup class functions. If put to False, only critical actions will be displayed, resulting in a minimized log.
 2. Fixed file updating in Backup class by adding hash computation to the backup function when updating files. This was already in the Synchronize class.
