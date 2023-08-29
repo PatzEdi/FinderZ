@@ -25,7 +25,7 @@ Full File Management Library for Python. And growing (V2 is out!)
 
 **If you want to use the Synchronization and Backup classes, please read the documentation linked above in order to prevent data loss**
 
-**AND: Huge thank you to [@RichardDally](https://github.com/RichardDally) , [@coolslutguy420](https://github.com/coolslutguy420), [@mikudae](https://github.com/mikudae) , [@kyzsuukii](https://github.com/kyzsuukii) , and [@fablau](github.com/fablau) for starring FinderZ.**
+**AND: Huge thank you to [@RichardDally](https://github.com/RichardDally) , [@coolslutguy420](https://github.com/coolslutguy420), [@mikudae](https://github.com/mikudae) , and [@fablau](github.com/fablau) for starring FinderZ.**
 ## **Written in python, this library provides you with different file operation commands as well as info gathering commands on directories as well as files.** 
 ____________________________________________________________________________
 ## **CHANGELOG: V2.0.0**
