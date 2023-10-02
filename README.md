@@ -32,25 +32,35 @@ ____________________________________________________________________________
 
 To check out the details of V2, go to the [documentation](https://finderz.readthedocs.io/en/latest/index.html). This is a big update with many new things!
 
-**Small Note/Update**:
-FinderZ Will be updated to 2.1.0 soon to fix some minor/major bugs and include new features. Sorry for the latency in updates!
+**Major update 2.1.0:**
+1. Fixed bug where createFiles function parameter “firstFileStartsAtOne” is the opposite of what it should be. When set to True, there is no number, but when set to False, there is a number.
+2. New function mergeClassFolders in fileOperands to automatically converge each file in each class folder into one singular folder (useful for machine learning (ML))
+3. New GatherInfo function getFileStats (word count, character count, line count, byte count)
+4. Smaller functions within getFileStats are separate, which means you can access them separately. These include:
+    1. wordCount, charCount, and byteCount. (lineCount is gathered through the already existing getFileLineAmount function)
+5. Fixed bug in GatherInfo for the isEmptyDir function where len() could not be conducted. if len(directories == 0): —> if len(directories) == 0: (Also fixed that files were not read in this function!)
+6. Changed name from getAmountofFilesinDir ---> getAmountofComponentsinDir. Switched parameter name from mainDir ---> dir. Added other options.
+7. Removed getAllFileNamesinDir function due to the existence of the readDir function.
+8. For the getFileLineContents function: Added option to return the value as a string (via f.read()) rather than a list (via f.readlines()). Added a try except to notify of errors (e.g. UnicodeDecodeError, FileExistsError)
+9. Updated computeHash function to fix some issues with the Synchronize class (more on that below).
 
-I am aware of some bugs that are in version 2.0.6
+
+NOTE: I have already started improving the Synchronize class, and in future updates, these things will be added. This will most likely be one, big update. Again, this below is not part of FinderZ 2.1.0, but are plans for the future.
+**Synchronize Class Goals:**
+1. Fix the bug where if the root folder of the last modified two folders is empty but the other one isn’t, it merges the files.
+2. This bug is due to for example renaming the root folders counting as “last modified”. The root folders should not be calculated, but rather the contents within the folders. To fix this, check whether or not the root folder that was “last modified” is empty or not.
+3. Add a “emptyFolderProtection” option. If set the True, an empty folder that has priority based on time last modified will not empty the other folder, but rather, it will inherit the other folders files.
+4. Fix the situation when two directories did not merge because of empty files with no content. Now, hashes will only be computed when the files are not empty.
+5. Add Quickstats option to display a smaller stats rather than a full log (files removed, files updated, files created, folders created, folders removed, backup folder updated, etc.)
+6. Add “force sync” option which removes ALL of the folders, files, and copies ALL of them back.
+
+**Also, the documentation will be updated to 2.1.0 soon**
 
 **Minor Fix Version 2.0.6:**
 1. Added log_non_critical parameter in the Synchronize and Backup class functions. If put to False, only critical actions will be displayed, resulting in a minimized log.
 2. Fixed file updating in Backup class by adding hash computation to the backup function when updating files. This was already in the Synchronize class.
 3. Fixed the Backup directories error (I thought this was already fixed before, but it is totally fixed now.)
 
-**Hot fix 2.0.5 had an issue in the Backup class, 2.0.6 fixes it.**
-
-**Minor Fix Version 2.0.4:**
-- Fixed bug where removing more than one file at a time gave an existence error. Sorry for that!
-- Fixed bug where removing a folder that contained folder with the same name as the sync backup folder would result in an infinite loop of backup folders being created.
-- Minimized logging by making file updating hash-dependent. Now, updating files is marked as a critical (C) action in the log.
-- Removed unnecessary printing in some functions.
-- Added a file comparison function in GatherInfo
-- Currently, after having tested FinderZ on Android, permission errors may occasionally occur. This is likely due to read/write permissions assigned to a specific file.
 
 ## **Usage**
 Installation:

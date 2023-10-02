@@ -14,18 +14,12 @@ class GatherInfo:
 		return valueAmount
 		
 	#Find the amount of files in a directory:
-	def getAmountofComponentsinDir(dir, returnAmountFiles = True, returnAmountDirectories = True):
-		directories, files = GatherInfo.readDir(dir)
-		
-		#Get each amount:
-		amount_dirs = len(directories)
-		amount_files = len(files)
-		if returnAmountFiles == False:
-			return amount_dirs
-		elif returnAmountDirectories == False:
-			return amount_files
-		else:
-			return amount_dirs, amount_files
+	def getAmountofFilesinDir(mainDir):
+		count = 0
+		for path in os.listdir(mainDir):
+			if os.path.isfile(os.path.join(mainDir, path)):
+				count += 1
+		return count
 	#List all file names in a directory:
 	def getAllFileNamesinDir(mainDir):
 		dir_list = os.listdir(mainDir)
@@ -39,17 +33,10 @@ class GatherInfo:
 			print(placeHolder + "\n")
 			iterator += 1
 	#Get contents of file:
-	def getFileLineContents(filePath, returnStringType = False):
-		try:
-			f = open(filePath, 'r')
-		except:
-			raise Exception("ERR: The file could not be opened/decoded.")
-		if returnStringType == False:
-			lines = f.readlines()
-		else:
-			lines = f.read()
+	def getFileLineContents(filePath):
+		f = open(filePath, 'r')
+		lines = f.readlines()
 		return lines
-	
 	#Get tile line amount
 	def getFileLineAmount(filePath):
 		f = open(filePath, 'r')
@@ -60,30 +47,24 @@ class GatherInfo:
     #New in V2:
     #New function in V2:
 	def isEmptyDir(dir):
-		directories, files = GatherInfo.readDir(dir)
-		if len(directories) == 0 and len(files) == 0:
-			return True
-		else:
-			return False
+			directories = GatherInfo.readDir(dir, returnFiles = False)
+			if len(directories == 0):
+				return True
+			else:
+				return False
 	#New in V2:
 	def computeHash(path):
+		
 		h = hashlib.sha1()
 		#Add try except block (to avoid duplicate directory errors in Synchronize class
 		try:
-			file = open(path, 'rb')
-
-			file_size = os.path.getsize(path)
-			# If the file is not empty, compute the hash:
-			if file_size > 0:
-				print(file_size)
+			with open(path,'rb') as file:
+				
 				chunk = 0
 				while chunk != b'':
 						chunk = file.read(1024)
 						h.update(chunk)	
-				return h.hexdigest()
-			else:
-				#Return false if the file is empty. In other words, skip the file:
-				return False
+			return h.hexdigest()
 		except:
 			#Return False if unhashable
 			return False
@@ -203,37 +184,6 @@ class GatherInfo:
 			f.writelines(output_lines)
 			f.close()
 		return output_lines
-	
-
-	# New functions (GatherInfo):
-	def wordCount(string): return len(string.split())
-		
-	def charCount(string): return len(string)
-		
-	def byteCount(filePath): return os.path.getsize(filePath)
-
-	def getFileStats(filePath):
-		try:
-			f = open(filePath)
-			stringed_contents = f.read()
-		except:
-			raise Exception("ERR: The file could not be opened/decoded.")
-		
-		stats = {'Word Count': 0, 'Char Count': 0, 'Byte Count': 0, 'Line Count': 0}
-		
-		#word count:
-		stats["Word Count"] = (GatherInfo.wordCount(stringed_contents))
-		
-		#char count:
-		stats["Char Count"] = (GatherInfo.charCount(stringed_contents))
-		
-		#byte count:
-		stats["Byte Count"] = (GatherInfo.byteCount(filePath))
-		
-		#line count:
-		stats["Line Count"]= (GatherInfo.getFileLineAmount(filePath))
-		
-		return stats
 class fileOperands:
 	#New recursive option to find files containing a global keyword, and new exactSearch function to replace the whole findFile funtion:
 	def findFiles(fileName, path, exactSearch = False, recursive = False, regex = False):
@@ -481,7 +431,7 @@ class fileOperands:
 		numExtension = 1
 		for i in range(createAmount):
 			
-			if numExtension == 1 and firstFileStartsAtOne == False:
+			if numExtension == 1 and firstFileStartsAtOne == True:
 				numExtension = str(numExtension)
 				f = open(keyWord + extensionType, 'w')
 			else:
@@ -599,26 +549,6 @@ class fileOperands:
 		#Write to the file:
 		f = open(filePath,'w')
 		f.writelines(lineContent)
-
-		# Multiple class folders merging (useful for ML data preprocessing)
-	def mergeClassFolders(parentClassPath, mergeDestination, removeOriginal = False):
-		# Get the dirs:
-		dirs = GatherInfo.readDir(parentClassPath, returnFiles = False)
-		# Iterate through each folder in the parentClassPath:
-		for folder in dirs:
-			# Get the path of the folder:
-			folder_path = os.path.join(parentClassPath, folder)
-			# Get the files:
-			files = GatherInfo.readDir(folder_path, returnDirectories = False)
-			#Iterate through each file in the folder:
-			for file in files:
-				if removeOriginal == False:
-					fileOperands.copyFile(os.path.join(folder_path, file), mergeDestination)
-				else:
-					try:
-						fileOperands.moveFile(os.path.join(folder_path, file), mergeDestination)
-					except shutil.Error:
-						print(f"File \"{os.path.join(mergeDestination, file)}\" already existed before moving file.")
 
 	def moveFile(originalFileDir, newFileDir):
 		shutil.move(originalFileDir, newFileDir)
