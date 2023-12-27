@@ -6,7 +6,6 @@ import time
 import subprocess
 import hashlib
 import re
-import random
 
 class GatherInfo:
 	#For finding files with that keyword and displaying how many there are:
@@ -76,6 +75,7 @@ class GatherInfo:
 			file_size = os.path.getsize(path)
 			# If the file is not empty, compute the hash:
 			if file_size > 0:
+				print(file_size)
 				chunk = 0
 				while chunk != b'':
 						chunk = file.read(1024)
@@ -234,64 +234,6 @@ class GatherInfo:
 		stats["Line Count"]= (GatherInfo.getFileLineAmount(filePath))
 		
 		return stats
-	
-	# New in V2.1.2: (These functions below are all new in V 2.1.2)
-	def isHiddenFile(file_path):
-		file_name = os.path.basename(file_path)
-		if file_name.startswith('.'):
-			return True
-		else:
-			return False
-		
-	def getAllHiddenFilesInDir(dir):
-		hiddenFiles = []
-		files = GatherInfo.readDir(dir, returnDirectories = False)
-		for file in files:
-			filePath = os.path.join(dir, file)
-			if GatherInfo.isHiddenFile(filePath):
-				hiddenFiles.append(filePath)
-		return hiddenFiles
-	# Function that returns the amount of each file extension within a directory (either recursively or not):
-	def getAmountOfEachFileTypeInDir(dir, recursive = False):
-		counter = 0
-		# The two main lists that will be concatenated and put into a dictionary:
-		extensions = []
-		amounts = []
-		for root, dirs, files in os.walk(dir):
-			if recursive == False and counter != 0:
-				break
-			# First, get the total amount of extensions:
-			for file in files:
-				extension = os.path.splitext(file)[1]
-				if extension not in extensions:
-					# Append the extension to the list:
-					extensions.append(extension)
-			counter += 1
-		# Second, get the amount of each extension once the extensions list is complete:
-		for i in range(len(extensions)):
-			extension_amount_counter = 0
-			counter = 0
-			for root, dirs, files in os.walk(dir):
-				if recursive == False and counter != 0:
-					break
-				# First, get the total amount of extensions:
-				for file in files:
-					extension = os.path.splitext(file)[1]
-					if extension == extensions[i]:
-						extension_amount_counter += 1
-
-				counter += 1
-			# Append the amount to the amounts list:
-			amounts.append(extension_amount_counter)
-		# Here, create the dictionary:
-		extensions = [x for _, x in sorted(zip(amounts, extensions), reverse = True)]
-		amounts = sorted(amounts, reverse = True)
-		# Create the dictionary:
-		extensions_dict = {}
-		for i in range(len(extensions)):
-			extensions_dict[extensions[i]] = amounts[i]
-		return extensions_dict
-		
 class fileOperands:
 	#New recursive option to find files containing a global keyword, and new exactSearch function to replace the whole findFile funtion:
 	def findFiles(fileName, path, exactSearch = False, recursive = False, regex = False):
@@ -715,85 +657,6 @@ class fileOperands:
 	#Remove a single file:
 	def removeFile(filePath):
 		os.remove(filePath)
-
-	
-	# New in V 2.1.2 (These functions below are all new in V 2.1.2)
-	def removeAllFilesInDir(dir, removeDirectories = False):
-		directories, files = GatherInfo.readDir(dir)
-		for file in files:
-			filePath = os.path.join(dir, file)
-			os.remove(filePath)
-		#Check whether or not the user wants to remove the directories along side the files:
-		if removeDirectories == True:
-			for directory in directories:
-				directoryPath = os.path.join(dir, directory)
-				shutil.rmtree(directoryPath)
-
-	# New XOR encryption functions:
-	def xor_encrypt_file(file_path, key, removeOriginal = False):
-		hashed_key = hashlib.sha256(str(key).encode()).digest()[0]
-
-		with open(file_path, 'rb') as f:
-			data = f.read()
-
-		encrypted_data = bytearray(b ^ hashed_key for b in data)  # XOR with hashed_key, not key
-
-		enc_file_path = file_path + '.enc'
-		with open(enc_file_path, 'wb') as f:
-			f.write(encrypted_data)
-		
-		if removeOriginal == True:
-			os.remove(file_path)
-
-	def xor_decrypt_file(enc_file_path, key, removeEncrypted = False):
-		hashed_key = hashlib.sha256(str(key).encode()).digest()[0]
-		
-		with open(enc_file_path, 'rb') as f:
-			data = f.read()
-
-		decrypted_data = bytearray(b ^ hashed_key for b in data)  # XOR with hashed_key, not key
-
-		file_path = enc_file_path.replace('.enc', '')
-		with open(file_path, 'wb') as f:
-			f.write(decrypted_data)
-
-		if removeEncrypted == True:
-			os.remove(enc_file_path)
-	
-	# Functions that recursivly encrypt/decrypt files
-	def xor_encrypt_files(dir, key, removeOriginal = False, recursive = False):
-		counter = 0
-		for root, dir, files in os.walk(dir):
-			if recursive == False and counter != 0:
-				break
-			for file in files:
-				file_path = os.path.join(root, file)
-				fileOperands.xor_encrypt_file(file_path, key, removeOriginal=removeOriginal)
-			counter += 1
-	
-	# Note: This function only takes into account files that end with .enc
-	def xor_decrypt_files(dir, key, removeEncrypted = False, recursive = False):
-		counter = 0
-		for root, dir, files in os.walk(dir):
-			if recursive == False and counter != 0:
-				break
-			for file in files:
-				if file.endswith(".enc"):
-					file_path = os.path.join(root, file)
-					fileOperands.xor_decrypt_file(file_path, key, removeEncrypted = removeEncrypted)
-			counter += 1
-	# Removes all .enc files in a directory recursively:
-	def removeEncFiles(dir, recursive = False):
-		counter = 0
-		for root, dir, files in os.walk(dir):
-			if recursive == False and counter != 0:
-				break
-			for file in files:
-				if file.endswith(".enc"):
-					file_path = os.path.join(root, file)
-					os.remove(file_path)
-			counter += 1
-		
 #The main logging class (Used in Synchronize and Backup classes)
 class Logging:
 	#Here, the announcement is simply something to announce/thecurrent/main activity or in this case print. dir is the parameter that takes in dir. dirAction consists of things like removing, adding, or copying, renaming, etc.
